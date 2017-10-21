@@ -1,5 +1,5 @@
 package ru.ifmo.se.configuredapp.model;
 
-public interface Method {
+public interface InvokeMethod {
     Object apply();
 }
