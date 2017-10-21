@@ -22,7 +22,7 @@ public class InvokeMethodAbstractFactoryImpl implements InvokeMethodAbstractFact
     public InvokeMethod createInvokeMethod(String methodBody, String httpMethod, StringBuilder errors) {
         try{
             CtClass functionClass =  pool.makeClass(
-                    "ru.ifmo.se.configuredapp.model.InvokeMethod$" + httpMethod + atomicLong);
+                    "ru.ifmo.se.configuredapp.model.InvokeMethod$" + httpMethod + atomicLong.getAndIncrement());
             functionClass.setInterfaces(new CtClass[] {
                     pool.makeClass("ru.ifmo.se.configuredapp.model.InvokeMethod")
                 }

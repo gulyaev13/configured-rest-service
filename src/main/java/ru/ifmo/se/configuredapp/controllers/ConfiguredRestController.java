@@ -33,6 +33,7 @@ public class ConfiguredRestController {
         }
         return ResponseEntity.status(404).body(errors);
     }
+
     @RequestMapping(method = RequestMethod.POST, value = "/configure")
     public ResponseEntity<?> configure(@RequestBody MethodConfiguration configuration){
         String httpMethod = configuration.getHttpMethod();
@@ -76,7 +77,59 @@ public class ConfiguredRestController {
                     + "\nHTTP method: " + httpMethod);
         }
         return ResponseEntity.ok().body("replace method :" + methodName + "\nbind on address: /api/" + methodName
-                + "HTTP method: " + httpMethod);
+                + "\nHTTP method: " + httpMethod);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/api/{method}")
+    public ResponseEntity<?> get(@PathVariable("method") String methodName){
+        MethodDecorator invokeMethod = getMethods.get(methodName);
+        if(invokeMethod == null){
+            return ResponseEntity.status(404).body("method '" + methodName + "' doesn't exist");
+        }
+        Object response = invokeMethod.apply();
+        if(response == null){
+            return ResponseEntity.status(invokeMethod.getOnFailCode()).build();
+        }
+        return ResponseEntity.status(invokeMethod.getOnSuccessCode()).body(response);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/api/{method}")
+    public ResponseEntity<?> post(@PathVariable("method") String methodName){
+        MethodDecorator invokeMethod = postMethods.get(methodName);
+        if(invokeMethod == null){
+            return ResponseEntity.status(404).body("method '" + methodName + "' doesn't exist");
+        }
+        Object response = invokeMethod.apply();
+        if(response == null){
+            return ResponseEntity.status(invokeMethod.getOnFailCode()).build();
+        }
+        return ResponseEntity.status(invokeMethod.getOnSuccessCode()).body(response);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/api/{method}")
+    public ResponseEntity<?> put(@PathVariable("method") String methodName){
+        MethodDecorator invokeMethod = putMethods.get(methodName);
+        if(invokeMethod == null){
+            return ResponseEntity.status(404).body("method '" + methodName + "' doesn't exist");
+        }
+        Object response = invokeMethod.apply();
+        if(response == null){
+            return ResponseEntity.status(invokeMethod.getOnFailCode()).build();
+        }
+        return ResponseEntity.status(invokeMethod.getOnSuccessCode()).body(response);
+    }
+    
+    @RequestMapping(method = RequestMethod.DELETE, value = "/api/{method}")
+    public ResponseEntity<?> delete(@PathVariable("method") String methodName){
+        MethodDecorator invokeMethod = deleteMethods.get(methodName);
+        if(invokeMethod == null){
+            return ResponseEntity.status(404).body("method '" + methodName + "' doesn't exist");
+        }
+        Object response = invokeMethod.apply();
+        if(response == null){
+            return ResponseEntity.status(invokeMethod.getOnFailCode()).build();
+        }
+        return ResponseEntity.status(invokeMethod.getOnSuccessCode()).body(response);
     }
 
 }

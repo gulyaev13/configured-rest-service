@@ -10,6 +10,7 @@ public class MethodConfiguration {
     private String methodBody;
     private String returnValue;
 
+    public MethodConfiguration(){}
     public MethodConfiguration(int onSuccessCode, int onFailCode, String httpMethod, String methodName, String methodType, String methodBody, String returnValue) {
         this.onSuccessCode = onSuccessCode;
         this.onFailCode = onFailCode;
